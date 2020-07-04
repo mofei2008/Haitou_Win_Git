@@ -1,0 +1,2508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>海投家族接口测试报告title</title>
+    <meta name="generator" content="HTMLTestRunner 1.2.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    
+<style type="text/css" media="screen">
+body        { font-family: Microsoft YaHei;padding: 20px; font-size: 100%; }
+table       { font-size: 100%; }
+.table tbody tr td{
+            vertical-align: middle;
+        }
+/* -- heading ---------------------------------------------------------------------- */
+.heading .description, .attribute {
+    clear: both;
+}
+/* --- 失败和错误合集样式 -- Gelomen --- */
+.failCollection, .errorCollection {
+    width: 100px;
+    float: left;
+}
+#failCaseOl li {
+    color: red
+}
+#errorCaseOl li {
+    color: orange
+}
+/* --- 打开截图特效样式 -- Gelomen --- */
+.data-img{
+    cursor:pointer
+}
+.pic_looper{
+    width:100%;
+    height:100%;
+    position: fixed;
+    left: 0;
+    top:0;
+    opacity: 0.6;
+    background: #000;
+    display: none;
+    z-index: 100;
+}
+.pic_show{
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    text-align: center;
+    display: none;
+    z-index: 100;
+}
+.pic_box{
+    padding:10px;
+    width:90%;
+    height:90%;
+    margin:40px auto;
+    text-align: center;
+    overflow: hidden;
+}
+.pic_box img{
+    width: auto;
+    height: 100%;
+    -moz-box-shadow: 0px 0px 20px 0px #000;
+    -webkit-box-shadow: 0px 0px 20px 0px #000;
+    box-shadow: 0px 0px 20px 0px #000;
+}
+/* --- 饼状图div样式 -- Gelomen --- */
+#container {
+    width: 450px;
+    height: 300px;
+    float: left;
+}
+/* -- report ------------------------------------------------------------------------ */
+#total_row  { font-weight: bold; }
+.passCase   { color: #5cb85c; }
+.failCase   { color: #d9534f; font-weight: bold; }
+.errorCase  { color: #f0ad4e; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+.screenshot:link { text-decoration: none;color: deeppink; }
+.screenshot:visited { text-decoration: none;color: deeppink; }
+.screenshot:hover { text-decoration: none;color: darkcyan; }
+.screenshot:active { text-decoration: none;color: deeppink; }
+</style>
+
+</head>
+<body >
+<script language="javascript" type="text/javascript">
+    $(function(){
+        // 修改 失败 和 错误 用例里对应按钮的颜色ClassName为动态加载 -- Gelomen
+    	$("button").each(function () {
+    	    var text = $(this).text();
+    	    if(text == "失败"){
+    	        $(this).addClass("btn-danger")
+            }else if(text == "错误") {
+                $(this).addClass("btn-warning")
+            }
+        });
+        // 给失败和错误合集加样式 -- Gelomen
+        var p_attribute = $("p.attribute");
+        p_attribute.eq(4).addClass("failCollection");
+        p_attribute.eq(5).addClass("errorCollection");
+        // 打开截图，放大，点击任何位置可以关闭图片  -- Gelomen
+        $(".screenshot").click(function(){
+            var img = $(this).attr("img");
+            $('.pic_show img').attr('src', img);
+            $('.pic_looper').fadeIn(200);
+            $('.pic_show').fadeIn(200);
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px")
+        });
+        $('.pic_looper, .pic_show').click(function(){
+            $('.pic_looper').fadeOut(200);
+            $('.pic_show').fadeOut(200)
+        });
+        var browserWidth = $(window).width();
+        var margin_left = browserWidth/2 - 450;
+        if(margin_left <= 240){
+            $("#container").css("margin", "auto");
+        }else {
+            $("#container").css("margin-left", margin_left + "px");
+        }
+        $(window).resize(function(){
+            // 改变窗口大小时，自动改变图片与顶部的距离  -- Gelomen
+            var browserHeight = $(window).height();
+            var pic_boxHeight = $(".pic_box").height();
+            var top = (browserHeight - pic_boxHeight)/2;
+            $('.pic_box').css("margin-top", top + "px");
+            // 改变窗口大小时，自动改变饼图的边距  -- Gelomen
+            var browserWidth = $(window).width();
+            var margin_left = browserWidth/2 - 450;
+            if(margin_left <= 240){
+                $("#container").css("margin", "auto");
+            }else {
+                $("#container").css("margin-left", margin_left + "px");
+            }
+        });
+        // 距离顶部超过浏览器窗口一屏时，回到顶部按钮才出现  -- Gelomen
+        $(window).scroll(function(){
+            var browserHeight = $(window).height();
+            var top = $(window).scrollTop();
+            if(top >= browserHeight){
+                $("#toTop").css("display", "block")
+            }else {
+                $("#toTop").css("display", "none")
+            }
+        })
+        // 增加回到顶部过程的动画，以看上去不会那么生硬  -- Gelomen
+        $("#toTop").click(function() {
+            $("html,body").animate({"scrollTop":0}, 700)
+        })
+        // 增加饼状图  -- Gelomen
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                spacing : [0, 0, 0, 0]
+            },
+            credits: {
+                enabled: false
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: false
+                }
+            },
+            title: {
+                floating:true,
+                text: '测试结果占比'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    colors: ['#81ca9d', '#f16d7e', '#fdc68c'],
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    point: {
+                        events: {
+                            mouseOver: function(e) {  // 鼠标滑过时动态更新标题
+                                chart.setTitle({
+                                    text: e.target.name+ '\t'+ e.target.y + ' 个'
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                innerSize: '80%',
+                name: '比例',
+                data: [
+                    ['通过', 0],
+                    {
+                        name: '失败',
+                        y: 0,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['错误', 83]
+                ]
+            }]
+        }, function(c) {
+            // 环形图圆心
+            var centerY = c.series[0].center[1],
+                titleHeight = parseInt(c.title.styles.fontSize);
+            c.setTitle({
+                y:centerY + titleHeight/2
+            });
+            chart = c;
+        });
+        // 查看 失败 和 错误 合集链接文字切换  -- Gelomen
+        $(".showDetail").click(function () {
+            if($(this).html() == "点击查看"){
+                $(this).html("点击收起")
+            }else {
+                $(this).html("点击查看")
+            }
+        })
+    });
+output_list = Array();
+/*level 调整增加只显示通过用例的分类 --Findyou / 修复筛选显示bug --Gelomen
+0:Summary //all hiddenRow
+1:Failed  //pt&et hiddenRow, ft none
+2:Pass    //pt none, ft&et hiddenRow
+3:Error   //pt&ft hiddenRow, et none
+4:All     //all none
+*/
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level == 2 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level == 1 || level == 0 || level == 3) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+        if (id.substr(0,2) == 'et') {
+            if (level == 1 || level == 0 || level == 2) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+                // 切换筛选时只显示预览   -- Gelomen
+                $("div[id^='div_ft']").attr("class", "collapse");
+                $("div[id^='div_et']").attr("class", "collapse");
+            }
+        }
+    }
+    //加入【详细】切换文字变化 --Findyou
+    detail_class=document.getElementsByClassName('detail');
+	//console.log(detail_class.length)
+	if (level == 3) {
+		for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="收起"
+		}
+	}
+	else{
+			for (var i = 0; i < detail_class.length; i++){
+			detail_class[i].innerHTML="详细"
+		}
+	}
+}
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        //ID修改 点 为 下划线 -Findyou
+        tid0 = 't' + cid.substr(1) + '_' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'e' + tid0;
+                tr = document.getElementById(tid);
+            }
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        //修改点击无法收起的BUG，加入【详细】切换文字变化 --Findyou
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+            document.getElementById(cid).innerText = "详细"
+        }
+        else {
+            document.getElementById(tid).className = '';
+            document.getElementById(cid).innerText = "收起"
+        }
+    }
+}
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+</script>
+<div class='pic_looper'></div> <div class='pic_show'><div class='pic_box'><img src=''/></div> </div>
+<div class='heading'>
+<div style="width: 650px; float: left;">
+    <h1 style="font-family: Microsoft YaHei">海投家族接口测试报告title</h1>
+    <p class='attribute'><strong>测试人员 : </strong> 李德涛</p>
+<p class='attribute'><strong>开始时间 : </strong> 2020-07-04 21:02:26</p>
+<p class='attribute'><strong>合计耗时 : </strong> 0:00:00.023936</p>
+<p class='attribute'><strong>测试结果 : </strong> 共 83，错误 83，通过率 = 0.00%</p>
+<p class='attribute'><strong>失败用例合集 : </strong> <ol style='float: left;'>无</ol></p>
+<p class='attribute'><strong>错误用例合集 : </strong> <div class='panel-default' style='float: left;'><a class='showDetail' data-toggle='collapse' href='#errorCaseOl' style='text-decoration: none;'>点击查看</a></div><ol id='errorCaseOl' class='collapse' style='float: left;'><li>test1_01___手机号正确的账户密码____haitou_user_user_loginByMobile____code____0000____post______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_02___手机号正确的账户错误密码____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa1111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_03___手机号为空____haitou_user_user_loginByMobile____code____9999____post______mobile______password___Aa1111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_04___手机号错误____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332122___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_05___密码为空____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password______regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_06___存在的手机号错误密码____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___fasfsf___regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_07___不存在的手机号____haitou_user_user_loginByMobile____code____9999____post______mobile___18610802222___password___fasfsf___regionalCode____86___userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_08___国别号为空____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa111111___regionalCode______userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_09___用户类别错误____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1111___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_10___用户端错误____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa111111___regionalCode______userType___1___clt___21211212____ (test_1_login_excel.Test_Login)</li><li>test1_11___邮箱正确的账户密码____haitou_user_user_loginByEmail____code____0000____post______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_12___邮箱正确的账户错误密码____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password___Aa1111111____userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_13___邮箱不存在____haitou_user_user_loginByEmail____code____9999____post______email___363613636_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_14___邮箱为空____haitou_user_user_loginByEmail____code____9999____post______email______password___Aa111111____userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_15___密码为空____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password_______userType___1___clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_16___用户类别错误____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password___Aa111111____userType______clt___h5Wealth____ (test_1_login_excel.Test_Login)</li><li>test1_17___用户端错误____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password___Aa111111____userType___1___clt_______ (test_1_login_excel.Test_Login)</li><li>test1_1___邮箱用户查询美亚信贷产品____haitou_product_product_dailyProductList____post____code____0000____151____340____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_2_product.Test_Product)</li><li>test1_2___手机号用户查询美亚信贷产品____haitou_product_product_dailyProductList____post____code____0000____151____340____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_2_product.Test_Product)</li><li>test1_3___邮箱用户查询美车贷产品____haitou_product_product_dailyProductList____post____code____0000____151____342____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_2_product.Test_Product)</li><li>test1_4___手机号用户查询美车贷产品____haitou_product_product_dailyProductList____post____code____0000____151____342____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_2_product.Test_Product)</li><li>test2_1___订单确认页_邮箱用户查询美亚信贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_OrderConfirm.Test_Order_Confirm)</li><li>test2_2___订单确认页_手机号用户查询美亚信贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____340____10000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_OrderConfirm.Test_Order_Confirm)</li><li>test2_3___订单确认页_邮箱用户查询美车贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____342____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_OrderConfirm.Test_Order_Confirm)</li><li>test2_4___订单确认页_手机号用户查询美车贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____342____10000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_OrderConfirm.Test_Order_Confirm)</li><li>test1_01___邮箱用户查询固收账户____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_02___手机号用户查询固收账户____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_03___邮箱用户查询固收_基金总额____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_04___手机号用户查询固收_基金总额____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_05___邮箱查询余额管理计划用户设置____haitou_order_moneyFund_queryUserSetting____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_06___手机查询余额管理计划用户设置____haitou_order_moneyFund_queryUserSetting____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_07___邮箱货币基金查询订单列表____haitou_order_moneyFund_queryOrderList____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_08___手机货币基金查询订单列表____haitou_order_moneyFund_queryOrderList____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_09___邮箱货币基金用户账户信息____haitou_order_moneyFund_queryUserAccount____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_10___手机货币基金用户账户信息____haitou_order_moneyFund_queryUserAccount____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_11___邮箱查询货币基金账户收益列表____haitou_order_moneyFund_queryAccountEarningsList____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_12___手机查询货币基金账户收益列表____haitou_order_moneyFund_queryAccountEarningsList____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_13___邮箱查询用户信息____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_14___手机查询用户信息____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_15___邮箱查询用户信息____haitou_user_userInfo_queryAssetSummary____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_16___手机查询用户信息____haitou_user_userInfo_queryAssetSummary____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_17___邮箱查询站内信_____haitou_user_userInfo_queryUserMessageList____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_18___手机查询站内信_____haitou_user_userInfo_queryUserMessageList____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_19___上传接口测试_正确____haitou_order_moneyFund_uploadFile____post____code____9999____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test1_20___上传接口____haitou_order_moneyFund_uploadFile____post____code____9999____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_3_count.Test_Count)</li><li>test2_01___用户查询固收账户_token错误____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_02___用户查询固收_基金总额_token错误____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_03___查询余额管理计划用户设置_token错误____haitou_order_moneyFund_queryUserSetting____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_04___货币基金查询订单列表_token错误____haitou_order_moneyFund_queryUserAccount____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_05___货币基金用户账户信息_token错误____haitou_order_moneyFund_queryOrderList____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_06___查询货币基金账户收益列表_token错误____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_07___查询用户信息_token错误____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000____h5Wealth____fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_08___用户查询固收账户_token为空____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_09___用户查询固收_基金总额_token为空____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_10___查询余额管理计划用户设置_token为空____haitou_order_moneyFund_queryUserSetting____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_11___货币基金查询订单列表_token为空____haitou_order_moneyFund_queryUserAccount____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_12___货币基金用户账户信息_token为空____haitou_order_moneyFund_queryOrderList____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_13___查询货币基金账户收益列表_token为空____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_14___查询用户信息_token为空____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000____h5Wealth______ (test_3_count.Test_Count)</li><li>test2_15___用户查询固收账户_token错误_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_16___用户查询固收_基金总额_token错误_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_17___查询余额管理计划用户设置_token错误_端为空____haitou_order_moneyFund_queryUserSetting____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_18___货币基金查询订单列表_token错误_端为空____haitou_order_moneyFund_queryUserAccount____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_19___货币基金用户账户信息_token错误_端为空____haitou_order_moneyFund_queryOrderList____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_20___查询货币基金账户收益列表_token错误_端为空____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_21___查询用户信息_token错误_端为空____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000________fasdfsafds__ (test_3_count.Test_Count)</li><li>test2_22___用户查询固收账户_token为空_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_23___用户查询固收_基金总额_token为空_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_24___查询余额管理计划用户设置_token为空_端为空____haitou_order_moneyFund_queryUserSetting____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_25___货币基金查询订单列表_token为空_端为空____haitou_order_moneyFund_queryUserAccount____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_26___货币基金用户账户信息_token为空_端为空____haitou_order_moneyFund_queryOrderList____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_27___查询货币基金账户收益列表_token为空_端为空____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_28___查询用户信息_token为空_端为空____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000__________ (test_3_count.Test_Count)</li><li>test2_1___邮箱用户查询美亚信贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_4_OrderT.Test_OrderT)</li><li>test2_2___邮箱用户查询美车贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_4_OrderT.Test_OrderT)</li><li>test2_3___手机号用户查询美亚信贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_4_OrderT.Test_OrderT)</li><li>test2_4___手机号用户查询美车贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_4_OrderT.Test_OrderT)</li><li>test1_1___申购基金100元____haitou_order_moneyFund_generateBuyOrder____post____code____9999____100____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_5_foud.Test_Product)</li><li>test1_2___申购基金200元____haitou_order_moneyFund_generateBuyOrder____post____msg____重复提交____2000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_5_foud.Test_Product)</li><li>test1_1___已认证邮箱用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____362____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_6_userinfo.Test_Product)</li><li>test1_2___未认证手机号用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____360____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_6_userinfo.Test_Product)</li><li>test1_3___已认证邮箱用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____362____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____ (test_6_userinfo.Test_Product)</li><li>test1_4___未认证手机号用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____360____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____ (test_6_userinfo.Test_Product)</li></ol></p>
+
+    <p class='description'>测试详情如下：description</p>
+</div>
+<div id="container"></div>
+</div>
+
+
+<div style="width: 500px; clear: both;">
+<p id='show_detail_line'>
+<a class="btn btn-primary" href='javascript:showCase(0)'>概要{ 0.00% }</a>
+<a class="btn btn-success" href='javascript:showCase(2)'>通过{ 0 }</a>
+<a class="btn btn-danger" href='javascript:showCase(1)'>失败{ 0 }</a>
+<a class="btn btn-warning" href='javascript:showCase(3)'>错误{ 83 }</a>
+<a class="btn btn-info" href='javascript:showCase(4)'>所有{ 83 }</a>
+</p>
+</div>
+<table id='result_table' class="table table-condensed table-bordered table-hover">
+<colgroup>
+<col align='left' style="width: 300px;"/>
+<col align='right' style="width: 300px;"/>
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' style="width: 200px;"/>
+</colgroup>
+<tr id='header_row' class="text-center success" style="font-weight: bold;font-size: 14px;">
+    <td>用例集/测试用例</td>
+    <td>说明</td>
+    <td>总计</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>耗时</td>
+    <td>详细</td>
+</tr>
+
+<tr class='errorClass warning'>
+    <td>Test_Login</td>
+    <td></td>
+    <td class="text-center">17</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">17</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c1',17)" class="detail" id='c1'>详细</a></td>
+</tr>
+
+    <tr id='et1_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_01___手机号正确的账户密码____haitou_user_user_loginByMobile____code____0000____post______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_1'>错误</button>
+        <div id='div_et1_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_1'>错误</button>
+        <div id='div_et1_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_1: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_02___手机号正确的账户错误密码____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa1111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_2'>错误</button>
+        <div id='div_et1_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_2'>错误</button>
+        <div id='div_et1_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_2: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_03___手机号为空____haitou_user_user_loginByMobile____code____9999____post______mobile______password___Aa1111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_3'>错误</button>
+        <div id='div_et1_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_3'>错误</button>
+        <div id='div_et1_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_3: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_04___手机号错误____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332122___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_4'>错误</button>
+        <div id='div_et1_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_4'>错误</button>
+        <div id='div_et1_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_4: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_5' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_05___密码为空____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password______regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_5'>错误</button>
+        <div id='div_et1_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_5'>错误</button>
+        <div id='div_et1_5' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_5: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_6' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_06___存在的手机号错误密码____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___fasfsf___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_6'>错误</button>
+        <div id='div_et1_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_6'>错误</button>
+        <div id='div_et1_6' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_6: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_7' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_07___不存在的手机号____haitou_user_user_loginByMobile____code____9999____post______mobile___18610802222___password___fasfsf___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_7'>错误</button>
+        <div id='div_et1_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_7'>错误</button>
+        <div id='div_et1_7' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_7: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_8' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_08___国别号为空____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa111111___regionalCode______userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_8' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_8'>错误</button>
+        <div id='div_et1_8' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_8' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_8'>错误</button>
+        <div id='div_et1_8' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_8: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_9' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_09___用户类别错误____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1111___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_9' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_9'>错误</button>
+        <div id='div_et1_9' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_9' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_9'>错误</button>
+        <div id='div_et1_9' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_9: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_10' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_10___用户端错误____haitou_user_user_loginByMobile____code____9999____post______mobile___18610806332___password___Aa111111___regionalCode______userType___1___clt___21211212____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_10' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_10'>错误</button>
+        <div id='div_et1_10' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_10' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_10'>错误</button>
+        <div id='div_et1_10' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_10: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_11' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_11___邮箱正确的账户密码____haitou_user_user_loginByEmail____code____0000____post______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_11' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_11'>错误</button>
+        <div id='div_et1_11' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_11' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_11'>错误</button>
+        <div id='div_et1_11' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_11: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_12' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_12___邮箱正确的账户错误密码____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password___Aa1111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_12' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_12'>错误</button>
+        <div id='div_et1_12' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_12' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_12'>错误</button>
+        <div id='div_et1_12' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_12: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_13' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_13___邮箱不存在____haitou_user_user_loginByEmail____code____9999____post______email___363613636_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_13' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_13'>错误</button>
+        <div id='div_et1_13' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_13' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_13'>错误</button>
+        <div id='div_et1_13' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_13: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_14' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_14___邮箱为空____haitou_user_user_loginByEmail____code____9999____post______email______password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_14' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_14'>错误</button>
+        <div id='div_et1_14' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_14' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_14'>错误</button>
+        <div id='div_et1_14' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_14: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_15' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_15___密码为空____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password_______userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_15' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_15'>错误</button>
+        <div id='div_et1_15' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_15' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_15'>错误</button>
+        <div id='div_et1_15' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_15: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_16' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_16___用户类别错误____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password___Aa111111____userType______clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_16' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_16'>错误</button>
+        <div id='div_et1_16' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_16' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_16'>错误</button>
+        <div id='div_et1_16' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_16: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et1_17' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_17___用户端错误____haitou_user_user_loginByEmail____code____9999____post______email___lidetao_163_com___password___Aa111111____userType___1___clt_______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et1_17' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et1_17'>错误</button>
+        <div id='div_et1_17' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et1_17' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et1_17'>错误</button>
+        <div id='div_et1_17' class="collapse in">
+        <pre style="text-align:left">
+        
+et1_17: 测试开始！
+Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_1_login_excel.py", line 22, in setUp
+    self.host = ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Product</td>
+    <td>产品列表页</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c2',4)" class="detail" id='c2'>详细</a></td>
+</tr>
+
+    <tr id='et2_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_1___邮箱用户查询美亚信贷产品____haitou_product_product_dailyProductList____post____code____0000____151____340____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et2_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et2_1'>错误</button>
+        <div id='div_et2_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et2_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et2_1'>错误</button>
+        <div id='div_et2_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et2_1: 测试开始！
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\Test\Haitou_win_git\testcase\test_2_product.py", line 29, in test1
+    host = self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et2_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_2___手机号用户查询美亚信贷产品____haitou_product_product_dailyProductList____post____code____0000____151____340____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et2_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et2_2'>错误</button>
+        <div id='div_et2_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et2_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et2_2'>错误</button>
+        <div id='div_et2_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et2_2: 测试开始！
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\Test\Haitou_win_git\testcase\test_2_product.py", line 29, in test1
+    host = self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et2_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_3___邮箱用户查询美车贷产品____haitou_product_product_dailyProductList____post____code____0000____151____342____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et2_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et2_3'>错误</button>
+        <div id='div_et2_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et2_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et2_3'>错误</button>
+        <div id='div_et2_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et2_3: 测试开始！
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\Test\Haitou_win_git\testcase\test_2_product.py", line 29, in test1
+    host = self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et2_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_4___手机号用户查询美车贷产品____haitou_product_product_dailyProductList____post____code____0000____151____342____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et2_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et2_4'>错误</button>
+        <div id='div_et2_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et2_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et2_4'>错误</button>
+        <div id='div_et2_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et2_4: 测试开始！
+Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\Test\Haitou_win_git\testcase\test_2_product.py", line 29, in test1
+    host = self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Order_Confirm</td>
+    <td>订单确认页</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c3',4)" class="detail" id='c3'>详细</a></td>
+</tr>
+
+    <tr id='et3_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_1___订单确认页_邮箱用户查询美亚信贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et3_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et3_1'>错误</button>
+        <div id='div_et3_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et3_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et3_1'>错误</button>
+        <div id='div_et3_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et3_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et3_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_2___订单确认页_手机号用户查询美亚信贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____340____10000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et3_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et3_2'>错误</button>
+        <div id='div_et3_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et3_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et3_2'>错误</button>
+        <div id='div_et3_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et3_2: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et3_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_3___订单确认页_邮箱用户查询美车贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____342____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et3_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et3_3'>错误</button>
+        <div id='div_et3_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et3_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et3_3'>错误</button>
+        <div id='div_et3_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et3_3: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et3_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_4___订单确认页_手机号用户查询美车贷产品____haitou_order_order_confirmOrderInfo____post____code____0000____151____342____10000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et3_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et3_4'>错误</button>
+        <div id='div_et3_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et3_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et3_4'>错误</button>
+        <div id='div_et3_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et3_4: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Count</td>
+    <td>各查询页面</td>
+    <td class="text-center">48</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">48</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c4',48)" class="detail" id='c4'>详细</a></td>
+</tr>
+
+    <tr id='et4_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_01___邮箱用户查询固收账户____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_1'>错误</button>
+        <div id='div_et4_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_1'>错误</button>
+        <div id='div_et4_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_1: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_02___手机号用户查询固收账户____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_2'>错误</button>
+        <div id='div_et4_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_2'>错误</button>
+        <div id='div_et4_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_2: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_03___邮箱用户查询固收_基金总额____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_3'>错误</button>
+        <div id='div_et4_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_3'>错误</button>
+        <div id='div_et4_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_3: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_04___手机号用户查询固收_基金总额____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_4'>错误</button>
+        <div id='div_et4_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_4'>错误</button>
+        <div id='div_et4_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_4: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_5' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_05___邮箱查询余额管理计划用户设置____haitou_order_moneyFund_queryUserSetting____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_5' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_5'>错误</button>
+        <div id='div_et4_5' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_5' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_5'>错误</button>
+        <div id='div_et4_5' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_5: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_6' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_06___手机查询余额管理计划用户设置____haitou_order_moneyFund_queryUserSetting____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_6' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_6'>错误</button>
+        <div id='div_et4_6' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_6' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_6'>错误</button>
+        <div id='div_et4_6' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_6: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_7' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_07___邮箱货币基金查询订单列表____haitou_order_moneyFund_queryOrderList____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_7' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_7'>错误</button>
+        <div id='div_et4_7' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_7' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_7'>错误</button>
+        <div id='div_et4_7' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_7: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_8' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_08___手机货币基金查询订单列表____haitou_order_moneyFund_queryOrderList____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_8' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_8'>错误</button>
+        <div id='div_et4_8' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_8' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_8'>错误</button>
+        <div id='div_et4_8' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_8: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_9' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_09___邮箱货币基金用户账户信息____haitou_order_moneyFund_queryUserAccount____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_9' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_9'>错误</button>
+        <div id='div_et4_9' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_9' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_9'>错误</button>
+        <div id='div_et4_9' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_9: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_10' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_10___手机货币基金用户账户信息____haitou_order_moneyFund_queryUserAccount____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_10' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_10'>错误</button>
+        <div id='div_et4_10' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_10' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_10'>错误</button>
+        <div id='div_et4_10' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_10: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_11' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_11___邮箱查询货币基金账户收益列表____haitou_order_moneyFund_queryAccountEarningsList____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_11' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_11'>错误</button>
+        <div id='div_et4_11' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_11' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_11'>错误</button>
+        <div id='div_et4_11' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_11: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_12' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_12___手机查询货币基金账户收益列表____haitou_order_moneyFund_queryAccountEarningsList____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_12' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_12'>错误</button>
+        <div id='div_et4_12' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_12' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_12'>错误</button>
+        <div id='div_et4_12' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_12: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_13' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_13___邮箱查询用户信息____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_13' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_13'>错误</button>
+        <div id='div_et4_13' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_13' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_13'>错误</button>
+        <div id='div_et4_13' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_13: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_14' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_14___手机查询用户信息____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_14' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_14'>错误</button>
+        <div id='div_et4_14' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_14' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_14'>错误</button>
+        <div id='div_et4_14' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_14: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_15' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_15___邮箱查询用户信息____haitou_user_userInfo_queryAssetSummary____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_15' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_15'>错误</button>
+        <div id='div_et4_15' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_15' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_15'>错误</button>
+        <div id='div_et4_15' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_15: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_16' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_16___手机查询用户信息____haitou_user_userInfo_queryAssetSummary____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_16' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_16'>错误</button>
+        <div id='div_et4_16' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_16' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_16'>错误</button>
+        <div id='div_et4_16' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_16: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_17' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_17___邮箱查询站内信_____haitou_user_userInfo_queryUserMessageList____post____code____0000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_17' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_17'>错误</button>
+        <div id='div_et4_17' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_17' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_17'>错误</button>
+        <div id='div_et4_17' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_17: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_18' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_18___手机查询站内信_____haitou_user_userInfo_queryUserMessageList____post____code____0000____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_18' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_18'>错误</button>
+        <div id='div_et4_18' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_18' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_18'>错误</button>
+        <div id='div_et4_18' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_18: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_19' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_19___上传接口测试_正确____haitou_order_moneyFund_uploadFile____post____code____9999____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_19' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_19'>错误</button>
+        <div id='div_et4_19' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_19' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_19'>错误</button>
+        <div id='div_et4_19' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_19: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_20' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_20___上传接口____haitou_order_moneyFund_uploadFile____post____code____9999____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_20' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_20'>错误</button>
+        <div id='div_et4_20' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_20' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_20'>错误</button>
+        <div id='div_et4_20' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_20: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_21' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_01___用户查询固收账户_token错误____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_21' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_21'>错误</button>
+        <div id='div_et4_21' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_21' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_21'>错误</button>
+        <div id='div_et4_21' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_21: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_22' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_02___用户查询固收_基金总额_token错误____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_22' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_22'>错误</button>
+        <div id='div_et4_22' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_22' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_22'>错误</button>
+        <div id='div_et4_22' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_22: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_23' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_03___查询余额管理计划用户设置_token错误____haitou_order_moneyFund_queryUserSetting____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_23' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_23'>错误</button>
+        <div id='div_et4_23' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_23' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_23'>错误</button>
+        <div id='div_et4_23' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_23: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_24' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_04___货币基金查询订单列表_token错误____haitou_order_moneyFund_queryUserAccount____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_24' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_24'>错误</button>
+        <div id='div_et4_24' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_24' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_24'>错误</button>
+        <div id='div_et4_24' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_24: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_25' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_05___货币基金用户账户信息_token错误____haitou_order_moneyFund_queryOrderList____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_25' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_25'>错误</button>
+        <div id='div_et4_25' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_25' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_25'>错误</button>
+        <div id='div_et4_25' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_25: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_26' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_06___查询货币基金账户收益列表_token错误____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_26' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_26'>错误</button>
+        <div id='div_et4_26' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_26' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_26'>错误</button>
+        <div id='div_et4_26' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_26: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_27' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_07___查询用户信息_token错误____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000____h5Wealth____fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_27' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_27'>错误</button>
+        <div id='div_et4_27' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_27' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_27'>错误</button>
+        <div id='div_et4_27' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_27: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_28' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_08___用户查询固收账户_token为空____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_28' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_28'>错误</button>
+        <div id='div_et4_28' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_28' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_28'>错误</button>
+        <div id='div_et4_28' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_28: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_29' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_09___用户查询固收_基金总额_token为空____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_29' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_29'>错误</button>
+        <div id='div_et4_29' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_29' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_29'>错误</button>
+        <div id='div_et4_29' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_29: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_30' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_10___查询余额管理计划用户设置_token为空____haitou_order_moneyFund_queryUserSetting____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_30' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_30'>错误</button>
+        <div id='div_et4_30' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_30' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_30'>错误</button>
+        <div id='div_et4_30' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_30: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_31' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_11___货币基金查询订单列表_token为空____haitou_order_moneyFund_queryUserAccount____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_31' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_31'>错误</button>
+        <div id='div_et4_31' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_31' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_31'>错误</button>
+        <div id='div_et4_31' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_31: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_32' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_12___货币基金用户账户信息_token为空____haitou_order_moneyFund_queryOrderList____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_32' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_32'>错误</button>
+        <div id='div_et4_32' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_32' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_32'>错误</button>
+        <div id='div_et4_32' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_32: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_33' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_13___查询货币基金账户收益列表_token为空____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_33' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_33'>错误</button>
+        <div id='div_et4_33' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_33' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_33'>错误</button>
+        <div id='div_et4_33' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_33: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_34' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_14___查询用户信息_token为空____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000____h5Wealth______</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_34' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_34'>错误</button>
+        <div id='div_et4_34' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_34' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_34'>错误</button>
+        <div id='div_et4_34' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_34: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_35' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_15___用户查询固收账户_token错误_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_35' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_35'>错误</button>
+        <div id='div_et4_35' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_35' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_35'>错误</button>
+        <div id='div_et4_35' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_35: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_36' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_16___用户查询固收_基金总额_token错误_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_36' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_36'>错误</button>
+        <div id='div_et4_36' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_36' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_36'>错误</button>
+        <div id='div_et4_36' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_36: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_37' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_17___查询余额管理计划用户设置_token错误_端为空____haitou_order_moneyFund_queryUserSetting____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_37' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_37'>错误</button>
+        <div id='div_et4_37' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_37' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_37'>错误</button>
+        <div id='div_et4_37' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_37: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_38' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_18___货币基金查询订单列表_token错误_端为空____haitou_order_moneyFund_queryUserAccount____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_38' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_38'>错误</button>
+        <div id='div_et4_38' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_38' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_38'>错误</button>
+        <div id='div_et4_38' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_38: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_39' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_19___货币基金用户账户信息_token错误_端为空____haitou_order_moneyFund_queryOrderList____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_39' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_39'>错误</button>
+        <div id='div_et4_39' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_39' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_39'>错误</button>
+        <div id='div_et4_39' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_39: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_40' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_20___查询货币基金账户收益列表_token错误_端为空____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_40' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_40'>错误</button>
+        <div id='div_et4_40' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_40' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_40'>错误</button>
+        <div id='div_et4_40' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_40: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_41' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_21___查询用户信息_token错误_端为空____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000________fasdfsafds__</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_41' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_41'>错误</button>
+        <div id='div_et4_41' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_41' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_41'>错误</button>
+        <div id='div_et4_41' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_41: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_42' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_22___用户查询固收账户_token为空_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForRegularEarnings____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_42' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_42'>错误</button>
+        <div id='div_et4_42' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_42' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_42'>错误</button>
+        <div id='div_et4_42' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_42: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_43' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_23___用户查询固收_基金总额_token为空_端为空____haitou_order_assetsStatistic_queryAssetsStatisticsForAll____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_43' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_43'>错误</button>
+        <div id='div_et4_43' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_43' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_43'>错误</button>
+        <div id='div_et4_43' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_43: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_44' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_24___查询余额管理计划用户设置_token为空_端为空____haitou_order_moneyFund_queryUserSetting____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_44' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_44'>错误</button>
+        <div id='div_et4_44' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_44' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_44'>错误</button>
+        <div id='div_et4_44' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_44: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_45' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_25___货币基金查询订单列表_token为空_端为空____haitou_order_moneyFund_queryUserAccount____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_45' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_45'>错误</button>
+        <div id='div_et4_45' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_45' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_45'>错误</button>
+        <div id='div_et4_45' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_45: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_46' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_26___货币基金用户账户信息_token为空_端为空____haitou_order_moneyFund_queryOrderList____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_46' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_46'>错误</button>
+        <div id='div_et4_46' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_46' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_46'>错误</button>
+        <div id='div_et4_46' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_46: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_47' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_27___查询货币基金账户收益列表_token为空_端为空____haitou_order_moneyFund_queryAccountEarningsList____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_47' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_47'>错误</button>
+        <div id='div_et4_47' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_47' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_47'>错误</button>
+        <div id='div_et4_47' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_47: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et4_48' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_28___查询用户信息_token为空_端为空____haitou_user_userInfo_queryUserInfoForWealth____post____code____4000__________</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et4_48' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et4_48'>错误</button>
+        <div id='div_et4_48' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et4_48' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et4_48'>错误</button>
+        <div id='div_et4_48' class="collapse in">
+        <pre style="text-align:left">
+        
+et4_48: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_3_count.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_OrderT</td>
+    <td>订单提交页</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c5',4)" class="detail" id='c5'>详细</a></td>
+</tr>
+
+    <tr id='et5_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_1___邮箱用户查询美亚信贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et5_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et5_1'>错误</button>
+        <div id='div_et5_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et5_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et5_1'>错误</button>
+        <div id='div_et5_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et5_1: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et5_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_2___邮箱用户查询美车贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et5_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et5_2'>错误</button>
+        <div id='div_et5_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et5_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et5_2'>错误</button>
+        <div id='div_et5_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et5_2: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et5_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_3___手机号用户查询美亚信贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et5_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et5_3'>错误</button>
+        <div id='div_et5_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et5_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et5_3'>错误</button>
+        <div id='div_et5_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et5_3: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et5_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test2_4___手机号用户查询美车贷产品____haitou_order_order_generateOrder____haitou_order_order_cancelOrder____post____code____0000____151____340____10000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et5_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et5_4'>错误</button>
+        <div id='div_et5_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et5_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et5_4'>错误</button>
+        <div id='div_et5_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et5_4: Traceback (most recent call last):
+  File "D:\Program Files\Java\Python38\lib\site-packages\ddt.py", line 151, in wrapper
+    return func(self, *args, **kwargs)
+TypeError: test2() missing 1 required positional argument: 'login'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Product</td>
+    <td></td>
+    <td class="text-center">2</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">2</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c6',2)" class="detail" id='c6'>详细</a></td>
+</tr>
+
+    <tr id='et6_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_1___申购基金100元____haitou_order_moneyFund_generateBuyOrder____post____code____9999____100____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et6_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et6_1'>错误</button>
+        <div id='div_et6_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et6_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et6_1'>错误</button>
+        <div id='div_et6_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et6_1: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_5_foud.py", line 24, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et6_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_2___申购基金200元____haitou_order_moneyFund_generateBuyOrder____post____msg____重复提交____2000____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et6_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et6_2'>错误</button>
+        <div id='div_et6_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et6_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et6_2'>错误</button>
+        <div id='div_et6_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et6_2: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_5_foud.py", line 24, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr class='errorClass warning'>
+    <td>Test_Product</td>
+    <td>产品列表页</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0</td>
+    <td class="text-center">0</td>
+    <td class="text-center">4</td>
+    <td class="text-center">0.0秒</td>
+    <td class="text-center"><a href="javascript:showClassDetail('c7',4)" class="detail" id='c7'>详细</a></td>
+</tr>
+
+    <tr id='et7_1' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_1___已认证邮箱用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____362____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et7_1' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et7_1'>错误</button>
+        <div id='div_et7_1' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et7_1' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et7_1'>错误</button>
+        <div id='div_et7_1' class="collapse in">
+        <pre style="text-align:left">
+        
+et7_1: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_6_userinfo.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et7_2' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_2___未认证手机号用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____360____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et7_2' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et7_2'>错误</button>
+        <div id='div_et7_2' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et7_2' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et7_2'>错误</button>
+        <div id='div_et7_2' class="collapse in">
+        <pre style="text-align:left">
+        
+et7_2: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_6_userinfo.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et7_3' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_3___已认证邮箱用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____362____h5Wealth____loginByEmail______email___lidetao_163_com___password___Aa111111____userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et7_3' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et7_3'>错误</button>
+        <div id='div_et7_3' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et7_3' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et7_3'>错误</button>
+        <div id='div_et7_3' class="collapse in">
+        <pre style="text-align:left">
+        
+et7_3: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_6_userinfo.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+    <tr id='et7_4' class='none'>
+        <td class='errorCase' style="vertical-align: middle"><div class='testcase'>test1_4___未认证手机号用户____haitou_user_userInfo_queryUserInfoForWealth____post____code____0000____360____h5Wealth____loginByMobile______mobile___18610806332___password___Aa111111___regionalCode____86___userType___1___clt___h5Wealth____</div></td>
+        <td style="vertical-align: middle"></td>
+        <td colspan='5' align='center'>
+        <!--默认收起错误信息 -Findyou
+        <button id='btn_et7_4' type="button"  class="btn btn-xs collapsed" data-toggle="collapse" data-target='#div_et7_4'>错误</button>
+        <div id='div_et7_4' class="collapse">  -->
+        <!-- 默认展开错误信息 -Findyou /  修复失败按钮的颜色 -- Gelomen -->
+        <button id='btn_et7_4' type="button"  class="btn btn-xs" data-toggle="collapse" data-target='#div_et7_4'>错误</button>
+        <div id='div_et7_4' class="collapse in">
+        <pre style="text-align:left">
+        
+et7_4: Traceback (most recent call last):
+  File "E:\Test\Haitou_win_git\testcase\test_6_userinfo.py", line 21, in setUp
+    self.host = read_Config.ReadConfig().get_config('HOST','host')
+AttributeError: 'ReadConfig' object has no attribute 'get_config'
+
+
+        </pre>
+        </div>
+        </td>
+        <td class='errorCase' style="vertical-align: middle"></td>
+    </tr>
+    
+<tr id='total_row' class="text-center active">
+    <td colspan='2'>总计</td>
+    <td>83</td>
+    <td>0</td>
+    <td>0</td>
+    <td>83</td>
+    <td>0.0秒</td>
+    <td>通过率：0.00%</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+    <div id="toTop" style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer; display: none">
+    <a><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
+    </span></a></div>
+    
+</body>
+</html>
